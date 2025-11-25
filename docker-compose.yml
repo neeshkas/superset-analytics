@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  superset:
+    image: apache/superset:latest
+    container_name: superset
+    restart: always
+    ports:
+      - "8088:8088"
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Чтобы видеть туннель к Bitrix
+    environment:
+      - SUPERSET_SECRET_KEY=TEST_KEY_CHANGE_ME_IN_PROD_12345
+      - SQLALCHEMY_DATABASE_URI=postgresql://superset:superset@db:5432/superset
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - public_net
+      - superset_net
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:14
+    container_name: superset_db
+    restart: always
+    environment:
+      - POSTGRES_USER=superset
+      - POSTGRES_PASSWORD=superset
+      - POSTGRES_DB=superset
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - superset_net
+
+  redis:
+    image: redis:7
+    container_name: superset_redis
+    restart: always
+    networks:
+      - superset_net
+
+networks:
+  public_net:
+    external: true
+  superset_net:
+
+volumes:
+  db_data:
