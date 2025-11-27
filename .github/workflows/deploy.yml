@@ -27,7 +27,7 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-          POSST: ${{ secrets.REDIS_HOST }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
           REDIS_PORT: ${{ secrets.REDIS_PORT }}
         with:
           host: ${{ secrets.HOST }}
