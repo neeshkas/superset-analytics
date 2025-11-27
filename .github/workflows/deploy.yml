@@ -22,38 +22,12 @@ jobs:
       # Заходим на сервер и запускаем
       - name: Start Containers
         uses: appleboy/ssh-action@v1.0.3
-        env:
-          SUPERSET_SECRET_KEY: ${{ secrets.SUPERSET_SECRET_KEY }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: SUPERSET_SECRET_KEY,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,REDIS_HOST,REDIS_PORT
           script: |
             mkdir -p ~/apps/superset
             cd ~/apps/superset
             docker compose pull
             docker compose up -d
-            
-            echo "Waiting for Superset to start..."
-            sleep 30
-            
-            echo "Initializing Superset..."
-            # Создаем админа (игнорируем ошибку, если уже есть)
-            docker compose exec -T superset superset fab create-admin \
-              --username admin \
-              --firstname Superset \
-              --lastname Admin \
-              --email admin@superset.com \
-              --password admin || true
-            
-            # Обновляем структуру БД
-            docker compose exec -T superset superset db upgrade
-            
-            # Инициализируем права доступа
-            docker compose exec -T superset superset init
