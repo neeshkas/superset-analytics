@@ -22,10 +22,18 @@ jobs:
       # Заходим на сервер и запускаем
       - name: Start Containers
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          SUPERSET_SECRET_KEY: ${{ secrets.SUPERSET_SECRET_KEY }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_TGRES_DB: ${{ secrets.POSTGRES_DB }}
+          REDIS_HOPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: SUPERSET_SECRET_KEY,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,REDIS_HOST,REDIS_PORT
           script: |
             mkdir -p ~/apps/superset
             cd ~/apps/superset
