@@ -25,7 +25,7 @@ jobs:
         env:
           SUPERSET_SECRET_KEY: ${{ secrets.SUPERSET_SECRET_KEY }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_TGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           REDIS_HOPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSST: ${{ secrets.REDIS_HOST }}
           REDIS_PORT: ${{ secrets.REDIS_PORT }}
